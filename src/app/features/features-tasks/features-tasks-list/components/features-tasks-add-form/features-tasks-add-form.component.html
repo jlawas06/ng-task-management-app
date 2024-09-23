@@ -1,0 +1,28 @@
+<form [formGroup]="form" (ngSubmit)="formSubmit.emit()" class="space-y-2">
+  <input
+    formControlName="title"
+    name="title"
+    placeholder="Task Title"
+    required
+    class="w-full p-2 border rounded"
+  />
+  <textarea
+    formControlName="description"
+    name="description"
+    placeholder="Task Description"
+    class="w-full p-2 border rounded"
+  ></textarea>
+  <input
+    formControlName="dueDate"
+    name="dueDate"
+    type="date"
+    required
+    class="w-full p-2 border rounded"
+  />
+  <button
+    type="submit"
+    class="app-button"
+  >
+    Add Task
+  </button>
+</form>
