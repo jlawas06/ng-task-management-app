@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { Task } from '../interfaces';
+import { TaskSelectors } from '../state';
 
 @Component({
   selector: 'app-features-tasks-detail',
@@ -12,17 +15,11 @@ import { Task } from '../interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeaturesTasksDetailComponent implements OnInit {
-  id: number = 0;
-  task: Task = {
-    id: 1,
-    title: 'Complete project proposal',
-    description: 'Finish writing the project proposal for the client meeting',
-    completed: true,
-    dueDate: new Date('2024-09-30'),
-  };
-  constructor(private activatedRoute: ActivatedRoute) {}
+  task$!: Observable<Task | undefined>;
+  constructor(private activatedRoute: ActivatedRoute, private store: Store) {}
 
   ngOnInit(): void {
-    this.id = this.activatedRoute.snapshot.params['id'];
+    const id = this.activatedRoute.snapshot.params['id'];
+    this.task$ = this.store.select(TaskSelectors.selectTaskById(id));
   }
 }
