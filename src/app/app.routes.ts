@@ -16,16 +16,9 @@ export const routes: Routes = [
       {
         path: 'tasks',
         loadChildren: () =>
-          import(
-            './features/features-tasks/features-tasks-list/features-tasks-list.module'
-          ).then((m) => m.FeaturesTasksListModule),
-      },
-      {
-        path: 'tasks/:id',
-        loadComponent: () =>
-          import(
-            './features/features-tasks/features-tasks-detail/features-tasks-detail.component'
-          ).then((m) => m.FeaturesTasksDetailComponent),
+          import('./features/features-tasks/features-tasks.module').then(
+            (m) => m.FeaturesTasksModule
+          ),
       },
     ],
   },

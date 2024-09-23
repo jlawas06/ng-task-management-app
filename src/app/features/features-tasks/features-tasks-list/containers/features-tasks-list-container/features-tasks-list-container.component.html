@@ -16,7 +16,8 @@
           />
           <span
             [ngClass]="{ 'line-through text-gray-500': task.completed }"
-            class="text-lg font-semibold"
+            class="text-lg font-semibold hover:cursor-pointer"
+            [routerLink]="['/tasks', task.id]"
           >
             {{ task.title }}
           </span>
