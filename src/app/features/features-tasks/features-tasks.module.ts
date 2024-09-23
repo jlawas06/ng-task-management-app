@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { TaskEffects, taskReducer } from './state';
 
 const routes: Routes = [
   {
@@ -21,6 +24,12 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, RouterModule, RouterModule.forChild(routes)],
+  imports: [
+    CommonModule,
+    RouterModule,
+    RouterModule.forChild(routes),
+    StoreModule.forFeature('tasks', taskReducer),
+    EffectsModule.forFeature([TaskEffects]),
+  ],
 })
 export class FeaturesTasksModule {}

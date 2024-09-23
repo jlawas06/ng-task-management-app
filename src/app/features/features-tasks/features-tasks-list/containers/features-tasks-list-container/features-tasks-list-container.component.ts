@@ -1,5 +1,13 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Task } from '../../../interfaces';
+import { TaskActions, TaskSelectors } from '../../../state';
 
 @Component({
   selector: 'app-features-tasks-list-container',
@@ -7,35 +15,19 @@ import { Task } from '../../../interfaces';
   styleUrl: './features-tasks-list-container.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FeaturesTasksListContainerComponent {
+export class FeaturesTasksListContainerComponent implements OnInit {
+  private store = inject(Store);
   showAddTaskDialog = signal<boolean>(false);
+  tasks$ = this.store.select(TaskSelectors.selectAllTasks);
 
-  tasks: Task[] = [
-    {
-      id: 1,
-      title: 'Complete project proposal',
-      description: 'Finish writing the project proposal for the client meeting',
-      completed: false,
-      dueDate: new Date('2024-09-30'),
-    },
-    {
-      id: 2,
-      title: 'Buy groceries',
-      description: 'Get milk, eggs, bread, and vegetables',
-      completed: true,
-      dueDate: new Date('2024-09-25'),
-    },
-    {
-      id: 3,
-      title: 'Schedule dentist appointment',
-      description: 'Call the dentist office to schedule a check-up',
-      completed: false,
-      dueDate: new Date('2024-10-05'),
-    },
-  ];
+  ngOnInit(): void {
+    this.store.dispatch(TaskActions.loadTasks());
+  }
 
   toggleTaskCompletion(task: Task): void {
-    task.completed = !task.completed;
+    const updatedTask = { ...task };
+    updatedTask.completed = !updatedTask.completed;
+    this.store.dispatch(TaskActions.updateTask({ task: updatedTask }));
   }
 
   onClickAddTask() {
@@ -43,11 +35,11 @@ export class FeaturesTasksListContainerComponent {
   }
 
   onDeleteTask(taskId: number) {
-    this.tasks = this.tasks.filter(t => t.id !== taskId);
+    this.store.dispatch(TaskActions.deleteTask({ id: taskId }));
   }
 
   onAddTask(newTask: Task) {
-    this.tasks.push(newTask);
+    this.store.dispatch(TaskActions.addTask({ task: newTask }));
     this.showAddTaskDialog.set(false);
   }
 }

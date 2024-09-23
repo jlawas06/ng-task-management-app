@@ -28,7 +28,6 @@ export class FeaturesTasksAddDialogContainerComponent {
   });
 
   onAddTask() {
-    console.log(this.form)
     if (this.form.invalid) return;
 
     this.addTask.emit(this.form.value as Task);
